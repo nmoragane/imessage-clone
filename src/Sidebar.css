@@ -36,3 +36,18 @@
     background: transparent;
     outline-width: 0;
 }
+
+.sidebar__chats{
+    overflow: scroll;
+}
+
+/* hide the scrollbar for chrome, safari and opera */
+.sidebar__chats::-webkit-scrollbar{
+    display: none;
+}
+
+/* hide the scrollbar for IE, Edge and firefox */
+.sidebar__chats {
+    -ms-overflow-style: none; /*IE and Edge */
+    scrollbar-width: none;/*Firefox */
+}
