@@ -7,7 +7,7 @@ function SidebarChat(id, chatName) {
         <div className="sidebarChat">
             <Avatar/>
             <div className="sidebarChat__info">
-                <h3>{chatName}</h3>
+                <h3>{toString(chatName)}</h3>
                 <p>Last message sent...</p>
                 <small>timestamp</small>
             </div>
