@@ -1,10 +1,28 @@
 import { IconButton } from '@material-ui/core';
 import MicNoneIcon from "@material-ui/icons/MicNone";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import './Chat.css'
+import { selectChatId, selectChatName } from './features/chatSlice';
+import db from './firebase';
+import Message from './Message';
 
 function Chat() {
     const [input, setInput] = useState("");
+    const chatName = useSelector(selectChatName);
+    const chatId = useSelector(selectChatId);
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        if (chatId) {
+            db.collection('chats').doc(chatId).collection("messages").orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+                setMessages(snapshot.docs.map(doc => ({
+                    id:doc.id,
+                    data: doc.data()
+                })))
+            })
+        }
+    })
 
     const sendMessage = (e) => {
         e.preventDefault();
@@ -19,15 +37,15 @@ function Chat() {
         <div className="chat">
             {/* chat header */}
             <div className="chat__header">
-                <h4>To: <span className="chat__name">Channel Name</span></h4>
+                <h4>To: <span className="chat__name">{toString(chatName)}</span></h4>
                 <strong>Details</strong>
             </div>
 
             {/* chat messages */}
             <div className="chat__messages">
-                <h2>I am a message</h2>
-                <h2>I am a message</h2>
-                <h2>I am a message</h2>
+                <Message/>
+                <Message/>
+                <Message/>
             </div>
 
             {/* chat input */}
