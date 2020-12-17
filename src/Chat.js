@@ -6,8 +6,11 @@ import './Chat.css'
 import { selectChatId, selectChatName } from './features/chatSlice';
 import db from './firebase';
 import Message from './Message';
+import firebase from 'firebase';
+import { selectUser } from './features/userSlice';
 
 function Chat() {
+    const user = useSelector(selectUser)
     const [input, setInput] = useState("");
     const chatName = useSelector(selectChatName);
     const chatId = useSelector(selectChatId);
@@ -27,8 +30,17 @@ function Chat() {
     const sendMessage = (e) => {
         e.preventDefault();
 
-
         //firebase
+        db.collection('chats').doc(chatId).collection("messages").add({
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            message: input,
+            uid: user.uid,
+            photo: user.photo,
+            email: user.email,
+            displayName: user.displayName,
+
+        })
+
         setInput("");
 
     };
@@ -43,9 +55,9 @@ function Chat() {
 
             {/* chat messages */}
             <div className="chat__messages">
-                <Message/>
-                <Message/>
-                <Message/>
+                {messages.map(({id,data}) => {
+                    <Message key={id} contents={data}/>
+                })}
             </div>
 
             {/* chat input */}
