@@ -9,6 +9,8 @@ function SidebarChat({id, chatName}) {
     const dispatch = useDispatch();
     const [chatInfo, setChatInfo] = useState([])
 
+    console.log("chatname ->", chatName.chatName);
+
     useEffect(() => {
         db.collection('chats').doc(id)
         .collection('messages')
@@ -18,8 +20,10 @@ function SidebarChat({id, chatName}) {
         )
 
         )
+        
     }, [id]);
 
+    //console.log("doc ->", chatInfo);
     return (
         <div onClick={() => {
             dispatch(
@@ -31,7 +35,7 @@ function SidebarChat({id, chatName}) {
         }} className="sidebarChat">
             <Avatar src={chatInfo[0]?.photo}/>
             <div className="sidebarChat__info">
-                <h3>{toString(chatName)}</h3>
+                <h3>{chatName.chatName}</h3>
                 <p>{chatInfo[0]?.message}</p>
                 <small>{new Date(chatInfo[0]?.timestamp?.toDate()).toLocaleString()}</small>
             </div>
